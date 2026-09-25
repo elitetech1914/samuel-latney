@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samuel Latney — Paired by Providence
 
-## Getting Started
+A responsive, five-page author website built with Next.js 16, React 19, Tailwind CSS 4, Framer Motion, and Lucide icons. Content and visual direction follow the supplied Word blueprint. All story photography and retailer logos use the supplied `public` assets.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000. Production: `npm run build`, then `npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content and reusable components
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `lib/site.ts`: retailer names, images and purchase URLs; navigation; image paths; metadata helper.
+- `components/platform.tsx`: reusable retailer section with a `platforms` prop. Empty URLs show “Link coming soon”; confirmed URLs become external purchase links.
+- `components/`: shared header, footer, hero, buttons, headings, animation wrapper, character profiles, story path, themes, author section, newsletter and forms.
+- `app/`: Home, About Samuel, The Book, Alice & James, Contact, utility pages and 404. Previous `/about-samuel` and `/meet-alice-and-james` paths redirect to the canonical pages.
 
-## Learn More
+Images use `next/image` with responsive sizes, lazy loading, hero preloading, and AVIF/WebP optimization. Original assets remain intact. Fonts are served locally through `next/font/local`. Motion respects reduced-motion preferences.
 
-To learn more about Next.js, take a look at the following resources:
+## Add your purchase links
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Replace the empty `href` strings in `retailers` in `lib/site.ts` with verified product URLs. The retailer cards activate automatically. No invented purchase links, publication metadata, author portrait, testimonials or spoiler images are displayed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Connect forms when ready
 
-## Deploy on Vercel
+Copy `.env.example` to `.env.local`. Set `NEXT_PUBLIC_SITE_URL` to the public HTTPS origin to enable correct canonical URLs, social URLs and the sitemap. Rebuild after changing environment variables.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set `CONTACT_WEBHOOK_URL` and/or `NEWSLETTER_WEBHOOK_URL` to a trusted HTTPS endpoint accepting JSON POST requests. These can be your own backend or a workflow that delivers mail/adds newsletter subscribers. Set `FORM_WEBHOOK_SECRET` if your endpoint expects a shared Bearer token. Secrets remain on the server.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contact payload:
+
+```json
+{"kind":"contact","email":"reader@example.com","name":"Reader","subject":"Book club","message":"Our book club would like to connect.","category":"Book club","organization":"Optional group","consent":"true"}
+```
+
+Newsletter payload:
+
+```json
+{"kind":"newsletter","email":"reader@example.com"}
+```
+
+The recipient must return a successful HTTP status only after accepting delivery. The API validates fields and consent and handles malformed data, honeypots, failed delivery and timeouts. With no endpoints, submission is visibly disabled and the API returns 503 instead of a false success. The destination should handle spam/rate limits, subscriber double opt-in, retention and unsubscribe requests. Update the privacy copy with the actual provider and practices before enabling forms. No reader data is stored locally by this app.
+
+## Verification
+
+```bash
+npm run lint
+npm run build
+npm run test:e2e
+```
+
+Browser tests use the installed Microsoft Edge channel and start the production server on port 3100. Build first. Screenshots and test traces are local artifacts excluded from Git.
+
+## Publication content still to supply
+
+Confirmed retailer URLs, publication metadata/formats, the public domain, form delivery service and any approved author photograph or endorsements. The unverified first-person biography drafts were not presented as Samuel’s approved statements.

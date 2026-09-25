@@ -1,0 +1,127 @@
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const categories = [
+  "Reader message",
+  "Book club",
+  "Media",
+  "Event",
+  "Collaboration",
+  "Publishing",
+  "Other",
+];
+
+export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin)
+    return Response.json(
+      { error: "Please submit this form from the website." },
+      { status: 403 },
+    );
+  const raw = await request.text();
+  if (raw.length > 16000)
+    return Response.json(
+      { error: "Your message is too long." },
+      { status: 413 },
+    );
+  let fields: Record<string, unknown>;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      throw new Error("Invalid form");
+    fields = parsed as Record<string, unknown>;
+  } catch {
+    return Response.json(
+      { error: "Please check your form and try again." },
+      { status: 400 },
+    );
+  }
+  if (fields.website)
+    return Response.json(
+      { error: "Unable to submit this form." },
+      { status: 400 },
+    );
+  if (fields.kind !== "contact" && fields.kind !== "newsletter")
+    return Response.json({ error: "Unknown form." }, { status: 400 });
+  const email = typeof fields.email === "string" ? fields.email.trim() : "";
+  if (!emailPattern.test(email) || email.length > 254)
+    return Response.json(
+      { error: "Please enter a valid email address." },
+      { status: 400 },
+    );
+  const payload: Record<string, string> = { kind: fields.kind, email };
+  if (fields.kind === "contact") {
+    for (const [key, max, min] of [
+      ["name", 150, 1],
+      ["subject", 200, 1],
+      ["message", 6000, 10],
+    ] as const) {
+      const value = typeof fields[key] === "string" ? fields[key].trim() : "";
+      if (value.length < min || value.length > max)
+        return Response.json(
+          { error: `Please check your ${key}.` },
+          { status: 400 },
+        );
+      payload[key] = value;
+    }
+    if (fields.consent !== "on")
+      return Response.json(
+        { error: "Please confirm your consent before sending." },
+        { status: 400 },
+      );
+    if (
+      typeof fields.category !== "string" ||
+      !categories.includes(fields.category)
+    )
+      return Response.json(
+        { error: "Please choose an inquiry category." },
+        { status: 400 },
+      );
+    if (
+      fields.organization !== undefined &&
+      (typeof fields.organization !== "string" ||
+        fields.organization.length > 200)
+    )
+      return Response.json(
+        { error: "Please check your organization name." },
+        { status: 400 },
+      );
+    payload.category = fields.category;
+    payload.organization =
+      typeof fields.organization === "string" ? fields.organization.trim() : "";
+    payload.consent = "true";
+  }
+  const endpoint =
+    fields.kind === "contact"
+      ? process.env.CONTACT_WEBHOOK_URL
+      : process.env.NEWSLETTER_WEBHOOK_URL;
+  if (!endpoint)
+    return Response.json(
+      {
+        error:
+          "This form is not accepting submissions yet. Please check back soon.",
+      },
+      { status: 503 },
+    );
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.FORM_WEBHOOK_SECRET
+          ? { Authorization: `Bearer ${process.env.FORM_WEBHOOK_SECRET}` }
+          : {}),
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) throw new Error("Delivery failed");
+    return Response.json({ success: true });
+  } catch {
+    return Response.json(
+      {
+        error:
+          "We couldn’t send your message just now. Please try again later.",
+      },
+      { status: 502 },
+    );
+  }
+}
