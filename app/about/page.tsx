@@ -33,15 +33,13 @@ export default function AboutPage() {
       <section className="container section-space editorial-grid">
         <Reveal className="editorial-image">
           <Image
-            src={images.reading}
-            alt="A quiet moment with an open book at a coastal window."
+            src={images.author}
+            alt="Portrait of author Samuel Latney."
             fill
             sizes="(max-width: 800px) 100vw, 45vw"
             className="object-cover"
           />
-          <span className="image-caption">
-            A LITTLE QUIET. A WORLD OF POSSIBILITY.
-          </span>
+          
         </Reveal>
         <Reveal className="editorial-copy">
           <SectionHeading

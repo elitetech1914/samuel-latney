@@ -18,6 +18,7 @@ export const navigation = [
 ];
 
 export const images = {
+  author: "/author/Suave Portrait at a Golden Celebration.png",
   hero: "/images/Home Hero—Sunset Future.png",
   cover: "/book-mockup/mockup 26.png",
   books: "/book-mockup/mockup 23.png",
