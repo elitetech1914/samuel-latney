@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 
 // Add confirmed product URLs here. Empty URLs display an honest “Coming soon” state.
 export const retailers = [
-  { name: "Amazon Books", image: "/platforms/amazonbooks.webp", href: "" },
-  { name: "Barnes & Noble", image: "/platforms/barnesandnoble.webp", href: "" },
-  { name: "Books-A-Million", image: "/platforms/bam.webp", href: "" },
-  { name: "Walmart", image: "/platforms/wallmart.webp", href: "" },
-  { name: "Kobo", image: "/platforms/kobo.png", href: "" },
+  { name: "Amazon Books", image: "/platforms/amazonbooks.webp", href: "https://www.amazon.com/dp/B0HPRPQKCQ" },
+  { name: "Barnes & Noble", image: "/platforms/barnesandnoble.webp", href: "https://www.barnesandnoble.com/w/paired-by-providence-samuel-latney/1151805190?ean=9798951907332" } 
+  // { name: "Books-A-Million", image: "/platforms/bam.webp", href: "" },
+  // { name: "Walmart", image: "/platforms/wallmart.webp", href: "" },
+  // { name: "Kobo", image: "/platforms/kobo.png", href: "" },
 ];
 
 export const navigation = [
