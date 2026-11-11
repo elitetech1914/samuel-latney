@@ -58,15 +58,20 @@ export default function AboutPage() {
             change after one ordinary moment brings them together.
           </p>
           <p>
-            Through Alice and James, Samuel explores love, family, loyalty,
-            race, career, faith, and the quiet decisions that determine whether
-            we live by other people’s expectations or by the life we believe is
-            truly ours.
+            One might wonder how I came to write this book.  Short answer – it was not a lifetime dream.  
+            I did not set out to become an author.  I was born in the rural area of Virginia in a small suburban area called Sparta, a few miles from Bowling Green. 
+             My parents relocated to Washington, D.C., when I was small to seek more gainful employment.  I spent my early years in Sparta during the summer,
+             learning about country living from my grandparents who I loved dearly.  
           </p>
           <p>
-            His author platform begins with Alice and James — and leaves room
-            for the stories, questions, and publications that come next.
+            As the years rolled by, I worked, married and had children, but never thought about writing.  My life was full with five (5) children, nine (9) grands, and three (3) great grands.
+              They are my heartbeats.  Plus, I bowl three days a week.  I consider myself blessed.
           </p>
+          <p>
+            One day I started thinking about writing a book.  Where that came from, I can’t answer.  It just happened. I would get up early in the morning and start writing.
+             Ideas would come into focus to lead me to this story about love and its many facets.  I found myself wanting to write a book more and more, even writing after bowling.
+             I became very absorbed in telling this story about love – a situation that by all definition was Paired by Providence.
+            </p>
           <span className="author-signature">Samuel Latney</span>
           <Button href="/paired-by-providence" variant="text">
             Discover Paired by Providence
