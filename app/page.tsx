@@ -5,7 +5,7 @@ import { Characters } from "@/components/characters";
 import { QuoteBand } from "@/components/quote-band";
 import { AuthorSection } from "@/components/author-section";
 import { Platform } from "@/components/platform";
-//vercel deploy
+
 export default function Home() {
   return (
     <>
