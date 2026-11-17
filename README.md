@@ -57,3 +57,4 @@ Browser tests use the installed Microsoft Edge channel and start the production 
 ## Publication content still to supply
 
 Confirmed retailer URLs, publication metadata/formats, the public domain, form delivery service and any approved author photograph or endorsements. The unverified first-person biography drafts were not presented as Samuel’s approved statements.
+"# samuel-latney" 
