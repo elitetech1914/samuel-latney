@@ -1,3 +1,9 @@
+import nodemailer from "nodemailer";
+import { getFormWebhook, getZohoMailConfig } from "@/lib/form-delivery";
+import { formatFormEmail } from "@/lib/form-email";
+
+export const runtime = "nodejs";
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const categories = [
   "Reader message",
@@ -89,11 +95,9 @@ export async function POST(request: Request) {
       typeof fields.organization === "string" ? fields.organization.trim() : "";
     payload.consent = "true";
   }
-  const endpoint =
-    fields.kind === "contact"
-      ? process.env.CONTACT_WEBHOOK_URL
-      : process.env.NEWSLETTER_WEBHOOK_URL;
-  if (!endpoint)
+  const mail = getZohoMailConfig();
+  const endpoint = getFormWebhook(fields.kind);
+  if (!mail && !endpoint)
     return Response.json(
       {
         error:
@@ -102,18 +106,37 @@ export async function POST(request: Request) {
       { status: 503 },
     );
   try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.FORM_WEBHOOK_SECRET
-          ? { Authorization: `Bearer ${process.env.FORM_WEBHOOK_SECRET}` }
-          : {}),
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(10000),
-    });
-    if (!response.ok) throw new Error("Delivery failed");
+    if (mail) {
+      const transport = nodemailer.createTransport({
+        host: mail.host,
+        port: mail.port,
+        secure: mail.port === 465,
+        requireTLS: mail.port === 587,
+        auth: { user: mail.user, pass: mail.pass },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
+        dnsTimeout: 10000,
+      });
+      await transport.sendMail({
+        from: mail.user,
+        to: mail.to,
+        ...formatFormEmail(payload),
+      });
+    } else if (endpoint) {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(process.env.FORM_WEBHOOK_SECRET
+            ? { Authorization: `Bearer ${process.env.FORM_WEBHOOK_SECRET}` }
+            : {}),
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!response.ok) throw new Error("Delivery failed");
+    }
     return Response.json({ success: true });
   } catch {
     return Response.json(

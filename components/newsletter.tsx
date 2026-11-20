@@ -1,4 +1,4 @@
-import { newsletterEnabled } from "@/lib/site";
+import { isFormEnabled } from "@/lib/form-delivery";
 import { Eyebrow } from "./ui";
 import { NewsletterForm } from "./forms";
 import { Reveal } from "./reveal";
@@ -17,7 +17,7 @@ export function Newsletter() {
             next.
           </p>
         </div>
-        <NewsletterForm enabled={newsletterEnabled} />
+        <NewsletterForm enabled={isFormEnabled("newsletter")} />
       </Reveal>
       <span className="newsletter-watermark" aria-hidden="true">
         S L

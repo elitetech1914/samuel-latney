@@ -1,4 +1,5 @@
-import { contactEnabled, pageMetadata } from "@/lib/site";
+import { isFormEnabled } from "@/lib/form-delivery";
+import { pageMetadata } from "@/lib/site";
 import { PageIntro } from "@/components/page-intro";
 import { ContactForm } from "@/components/forms";
 import { Icon, type IconName } from "@/components/icon";
@@ -86,7 +87,7 @@ export default function ContactPage() {
             Tell us what’s on your mind. Fields are required unless marked
             optional.
           </p>
-          <ContactForm enabled={contactEnabled} />
+          <ContactForm enabled={isFormEnabled("contact")} />
         </div>
       </section>
       <section className="professional-strip">

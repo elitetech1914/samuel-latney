@@ -67,6 +67,3 @@ export function pageMetadata(
     },
   };
 }
-
-export const contactEnabled = Boolean(process.env.CONTACT_WEBHOOK_URL);
-export const newsletterEnabled = Boolean(process.env.NEWSLETTER_WEBHOOK_URL);

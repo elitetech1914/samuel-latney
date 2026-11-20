@@ -28,7 +28,11 @@ Replace the empty `href` strings in `retailers` in `lib/site.ts` with verified p
 
 Copy `.env.example` to `.env.local`. Set `NEXT_PUBLIC_SITE_URL` to the public HTTPS origin to enable correct canonical URLs, social URLs and the sitemap. Rebuild after changing environment variables.
 
-Set `CONTACT_WEBHOOK_URL` and/or `NEWSLETTER_WEBHOOK_URL` to a trusted HTTPS endpoint accepting JSON POST requests. These can be your own backend or a workflow that delivers mail/adds newsletter subscribers. Set `FORM_WEBHOOK_SECRET` if your endpoint expects a shared Bearer token. Secrets remain on the server.
+To receive contact submissions and reader-list signups by email, set `ZOHO_SMTP_HOST` to the outgoing server listed in your [Zoho Mail SMTP settings](https://www.zoho.com/mail/help/zoho-smtp.html). Set `ZOHO_SMTP_USER` to your full Zoho Mail address and `ZOHO_SMTP_PASSWORD` to your SMTP password. Use a Zoho app-specific password if you have two-factor authentication enabled. Port 465 is the default. Set `ZOHO_SMTP_PORT=587` to use STARTTLS. Set `FORM_EMAIL_TO` to a different recipient if needed. Otherwise, submissions go to the authenticated mailbox. Add the same variables to your hosting environment before rebuilding for production.
+
+Zoho delivery emails each signup to your inbox. Add those addresses to your mailing list before sending reader updates.
+
+When Zoho SMTP is unconfigured, `CONTACT_WEBHOOK_URL` and `NEWSLETTER_WEBHOOK_URL` can point to trusted HTTPS endpoints accepting JSON POST requests. Set `FORM_WEBHOOK_SECRET` if an endpoint expects a shared Bearer token.
 
 Contact payload:
 
@@ -42,7 +46,7 @@ Newsletter payload:
 {"kind":"newsletter","email":"reader@example.com"}
 ```
 
-The recipient must return a successful HTTP status only after accepting delivery. The API validates fields and consent and handles malformed data, honeypots, failed delivery and timeouts. With no endpoints, submission is visibly disabled and the API returns 503 instead of a false success. The destination should handle spam/rate limits, subscriber double opt-in, retention and unsubscribe requests. Update the privacy copy with the actual provider and practices before enabling forms. No reader data is stored locally by this app.
+Webhook endpoints should return a successful HTTP status only after accepting delivery. The API validates fields and consent and handles malformed data, honeypots, failed delivery and timeouts. A form without configured delivery is disabled and its API returns 503. The app forwards submissions without storing them locally.
 
 ## Verification
 

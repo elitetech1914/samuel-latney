@@ -94,7 +94,7 @@ export function NewsletterForm({ enabled }: { enabled: boolean }) {
       </div>
       <p className="newsletter-note" aria-live="polite">
         {status === "success" ? (
-          "You’re in. Thank you for joining Samuel’s reader community."
+          "Thank you for signing up for reader updates from Samuel Latney."
         ) : status === "error" ? (
           error
         ) : enabled ? (
@@ -149,10 +149,10 @@ export function ContactForm({ enabled }: { enabled: boolean }) {
         <span className="success-icon">
           <Icon name="check" size={32} />
         </span>
-        <h2>Thank you for reaching out.</h2>
+        <h2>Message received</h2>
         <p>
-          Your message has been received. We appreciate your interest in Samuel
-          Latney and <em>Paired by Providence</em>.
+          Thank you for contacting Samuel Latney. If your inquiry needs a
+          response, we’ll reply to the email address you provided.
         </p>
         <button
           onClick={() => setStatus("idle")}

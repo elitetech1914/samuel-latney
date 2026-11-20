@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
+import { getZohoMailConfig } from "@/lib/form-delivery";
 import { pageMetadata } from "@/lib/site";
 export const metadata = pageMetadata(
   "Privacy",
@@ -28,10 +29,11 @@ export default function PrivacyPage() {
         </p>
         <h2>Contact and reader-list forms</h2>
         <p>
-          Contact messages and the reader list are coming soon. While the forms
-          are disabled, they do not submit your information. This page will
-          explain how submissions are handled when these features become
-          available.
+          The contact form collects the details you enter so we can respond to
+          your inquiry. The reader-list form collects your email address so we
+          can send you reader updates.
+          {getZohoMailConfig() &&
+            " Zoho Mail delivers these submissions to our inbox."}
         </p>
         <h2>Retailer links</h2>
         <p>
