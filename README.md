@@ -32,6 +32,8 @@ To receive contact submissions and reader-list signups by email, set `ZOHO_SMTP_
 
 Zoho delivery emails each signup to your inbox. Add those addresses to your mailing list before sending reader updates.
 
+In Coolify, enable Runtime Variable for the SMTP settings and redeploy. Leave `FORM_EMAIL_TO` blank to deliver to the authenticated mailbox, or enter an email address. Set `NEXT_PUBLIC_SITE_URL` at build time for the public site URLs. A `502` from `/api/connect` means delivery failed. Check the application logs for the SMTP error code or webhook status.
+
 When Zoho SMTP is unconfigured, `CONTACT_WEBHOOK_URL` and `NEWSLETTER_WEBHOOK_URL` can point to trusted HTTPS endpoints accepting JSON POST requests. Set `FORM_WEBHOOK_SECRET` if an endpoint expects a shared Bearer token.
 
 Contact payload:

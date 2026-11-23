@@ -135,10 +135,33 @@ export async function POST(request: Request) {
         body: JSON.stringify(payload),
         signal: AbortSignal.timeout(10000),
       });
-      if (!response.ok) throw new Error("Delivery failed");
+      if (!response.ok) {
+        console.error("Form webhook rejected submission", {
+          kind: fields.kind,
+          status: response.status,
+        });
+        throw new Error("Delivery failed");
+      }
     }
     return Response.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error("Form delivery failed", {
+      kind: fields.kind,
+      method: mail ? "smtp" : "webhook",
+      code:
+        error instanceof Error &&
+        "code" in error &&
+        typeof error.code === "string"
+          ? error.code
+          : undefined,
+      smtpResponseCode:
+        mail &&
+        error instanceof Error &&
+        "responseCode" in error &&
+        typeof error.responseCode === "number"
+          ? error.responseCode
+          : undefined,
+    });
     return Response.json(
       {
         error:

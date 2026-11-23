@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { isFormEnabled } from "@/lib/form-delivery";
 import { pageMetadata } from "@/lib/site";
 import { PageIntro } from "@/components/page-intro";
@@ -34,7 +35,9 @@ const inquiries: { name: string; text: string; icon: IconName }[] = [
   },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  await connection();
+
   return (
     <>
       <PageIntro
