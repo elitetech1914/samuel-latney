@@ -17,7 +17,15 @@ const categories = [
 
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin)
+  const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const publicOrigin = publicSiteUrl
+    ? URL.parse(publicSiteUrl)?.origin
+    : undefined;
+  if (
+    origin &&
+    origin !== new URL(request.url).origin &&
+    origin !== publicOrigin
+  )
     return Response.json(
       { error: "Please submit this form from the website." },
       { status: 403 },
