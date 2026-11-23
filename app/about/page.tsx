@@ -4,7 +4,7 @@ import { PageIntro } from "@/components/page-intro";
 import { SectionHeading, Button } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
 import { QuoteBand } from "@/components/quote-band";
-
+//vercel deploy shift to coolify 
 export const metadata = pageMetadata(
   "About Samuel Latney",
   "Meet Samuel Latney and explore the ideas behind Paired by Providence: human connection, choice, family, ambition, faith, and the lives we build.",
